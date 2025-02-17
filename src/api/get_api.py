@@ -4,7 +4,7 @@ import json
 from pprint import pprint
 
 
-def get_latest_coin_data(symbol="BTC"):
+def get_latest_coin_data(symbol):
     api_url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
 
     headers = {
