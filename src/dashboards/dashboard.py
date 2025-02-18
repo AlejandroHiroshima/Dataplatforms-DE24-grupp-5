@@ -1,8 +1,8 @@
-import streamlit
+import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 from sqlalchemy import create_engine
 import pandas as pd
-from src.constants.constants import (
+from constants.constants import (
     POSTGRES_DBNAME,
     POSTGRES_HOST,
     POSTGRES_PASSWORD,
@@ -37,3 +37,7 @@ def layout():
     st.markdown("# Latest data")
 
     st.dataframe(df.tail())
+
+
+if __name__ == "__main__":
+    layout()
