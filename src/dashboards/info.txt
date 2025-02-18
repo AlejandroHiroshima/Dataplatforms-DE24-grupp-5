@@ -1,0 +1,4 @@
+packages to install
+streamlit
+streamlit_autorefresh
+sqlalchemy
