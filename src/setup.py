@@ -3,6 +3,7 @@ from setuptools import find_packages
 
 # find_packages will find all the packages with init.py
 print(find_packages())
+#! Hello
 
 setup(
     name="coins_project",
