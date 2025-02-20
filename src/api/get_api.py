@@ -1,4 +1,4 @@
-from constants import COINMARKET_API
+from constants.constants import COINMARKET_API
 from requests import Session, TooManyRedirects, Timeout, HTTPError
 import json
 from pprint import pprint
