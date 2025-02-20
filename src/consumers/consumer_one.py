@@ -10,13 +10,55 @@ from constants.constants import (
 )
 
 
+def currency_rates(target_currency):
+    exchange_rates = {
+        "SEK": 10.69,
+        "DKK": 6.66,
+        "NOK": 10.37,
+        "ISK": 140.21,
+        "EUR": 0.89,
+    }
+
+    if target_currency in exchange_rates:
+        return exchange_rates[target_currency]
+    else:
+        print(f"Currency {target_currency} not available")
+        return None
+
+
+def update_currency(price_in_usd, target_currency):
+    exchange_rate = currency_rates(target_currency)
+    if exchange_rate:
+        return round(price_in_usd * exchange_rate, 4)
+    else:
+        print(f"Cannot update price for currency {target_currency} - Not available.")
+        return None
+
+
 def extract_coin_data(message):
     latest_quote = message["quote"]["USD"]
+    price_usd = latest_quote["price"]
+    price_sek = update_currency(price_usd, "SEK")
+    price_dkk = update_currency(price_usd, "DKK")
+    price_nok = update_currency(price_usd, "NOK")
+    price_isk = update_currency(price_usd, "ISK")
+    price_eur = update_currency(price_usd, "EUR")
+
     return {
         "coin": message["name"],
-        "price": latest_quote["price"],
+        "price_usd": price_usd,
+        "price_sek": price_sek,
+        "price_dkk": price_dkk,
+        "price_nok": price_nok,
+        "price_isk": price_isk,
+        "price_eur": price_eur,
         "volume_24": latest_quote["volume_24h"],
         "updated": message["last_updated"],
+        "market_rank": message["cmc_rank"],
+        "percent_change_24h": latest_quote["percent_change_24h"],
+        "total_supply": message["total_supply"],
+        "infinite_supply": message["infinite_supply"],
+        "date_added": message["date_added"],
     }
 
 
