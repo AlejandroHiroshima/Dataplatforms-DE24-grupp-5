@@ -1,0 +1,82 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Producer One",
+            "type": "shell",
+            "command": "python producers/producer_one.py",
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "shell": "zsh"
+            },
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "Run Producer Two",
+            "type": "shell",
+            "command": "python producers/producer_two.py",
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "shell": "zsh"
+            },
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "Run Consumer One",
+            "type": "shell",
+            "command": "python consumers/consumer_one.py",
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "shell": "zsh"
+            },
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "Run Consumer Two",
+            "type": "shell",
+            "command": "python consumers/consumer_two.py",
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "shell": "zsh"
+            },
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "Run Streamlit Dashboard",
+            "type": "shell",
+            "command": "streamlit run dashboard.py",
+            "options": {
+                "cwd": "${workspaceFolder}/src/dashboards",
+                "shell": "zsh"
+            },
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "Start Docker Compose",
+            "type": "shell",
+            "command": "docker compose up -d",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "shell": "zsh"
+            },
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "Access Postgres DB",
+            "type": "shell",
+            "command": "docker exec -it postgres bash -c 'psql -U postgres -d coins_db'",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "shell": "zsh"
+            },
+            "problemMatcher": [],
+            "group": "build"
+        }
+    ]
+}

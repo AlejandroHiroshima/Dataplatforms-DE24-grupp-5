@@ -9,19 +9,14 @@ from constants.constants import (
     POSTGRES_PORT,
     POSTGRES_USER,
 )
+from charts import line_chart
 
-#! Stoped at 9:22
-
-# First run dashboard with pythom -m src...dashboard to load data.
-# Then run streamlit with python -m streamlit run src...dashboard.py or without
 
 connection_string = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DBNAME}"
 
 engine = create_engine(connection_string)
 
 
-#! We can move the load to otner place if we want.
-# Runs wehen we load dashboard module.
 def load_data(query):
     with engine.connect() as conn:
         df = pd.read_sql(query, conn)
@@ -41,6 +36,9 @@ def layout():
     st.markdown("## Latest price in USD for Ethereum")
 
     st.dataframe(df.tail())
+    price_chart = line_chart(x=df.index, y=df["price"], title="price USD")
+
+    st.pyplot(price_chart)
 
 
 if __name__ == "__main__":
