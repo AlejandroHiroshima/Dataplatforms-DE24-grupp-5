@@ -1,0 +1,14 @@
+packages to install
+streamlit
+streamlit_autorefresh
+sqlalchemy
+matplotlib
+
+ 1535* python producers/producer_one.py
+ 1536* cd src
+ 1537* python producers/producer_two.py
+ 1538* cd src
+ 1539* python consumers/consumer_one.py
+ 1540* cd src
+ 1541* python consumers/consumer_two.py
+ 1542  streamlit run dashboard.py
