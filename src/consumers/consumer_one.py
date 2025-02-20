@@ -1,7 +1,7 @@
 from quixstreams import Application
 from pprint import pprint
 from quixstreams.sinks.community.postgresql import PostgreSQLSink
-from src.constants.constants import (
+from constants.constants import (
     POSTGRES_DBNAME,
     POSTGRES_HOST,
     POSTGRES_PASSWORD,
