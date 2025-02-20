@@ -3,7 +3,7 @@ from quixstreams import Application
 import logging
 import json
 from quixstreams.sinks.community.postgresql import PostgreSQLSink
-from constants import (
+from constants.constants import (
     POSTGRES_DBNAME,
     POSTGRES_HOST,
     POSTGRES_PASSWORD,
