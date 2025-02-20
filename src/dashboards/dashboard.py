@@ -36,7 +36,7 @@ def layout():
     st.markdown("## Latest price in USD for Ethereum")
 
     st.dataframe(df.tail())
-    price_chart = line_chart(x=df.index, y=df["price"], title="price USD")
+    price_chart = line_chart(x=df.index, y=df["price_usd"], title="price USD")
 
     st.pyplot(price_chart)
 
