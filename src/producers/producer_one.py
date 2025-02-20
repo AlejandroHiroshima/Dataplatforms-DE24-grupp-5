@@ -1,6 +1,6 @@
 import time
 from quixstreams import Application
-from src.api.get_api import get_latest_coin_data
+from api.get_api import get_latest_coin_data
 import json
 from pprint import pprint
 
