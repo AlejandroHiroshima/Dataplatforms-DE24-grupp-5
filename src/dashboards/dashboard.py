@@ -29,12 +29,16 @@ def load_data(query):
         return df
 
 
+count = st_autorefresh(interval=10 * 1000, limit=100, key="data_refresh")
+
+
 def layout():
     df = load_data("SELECT * FROM ethereum;")
 
     st.markdown("# Coin data")
-    st.markdown("# Display live data from coinmarket API")
-    st.markdown("# Latest data")
+    st.markdown("Display live data from coinmarket API")
+    st.markdown("Latest data")
+    st.markdown("## Latest price in USD for Ethereum")
 
     st.dataframe(df.tail())
 
