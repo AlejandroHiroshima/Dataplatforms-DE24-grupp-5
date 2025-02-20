@@ -6,7 +6,7 @@ def line_chart(x, y, **options):
 
     ax.plot(x, y, linewidth=4)
 
-    ax.set(*options)
+    ax.set(**options)
 
     fig.tight_layout()
     return fig
