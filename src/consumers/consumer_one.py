@@ -46,7 +46,7 @@ def extract_coin_data(message):
 
     return {
         "coin": message["name"],
-        "price": latest_quote["price"],
+        "price_usd": price_usd,
         "price_sek": price_sek,
         "price_dkk": price_dkk,
         "price_nok": price_nok,
