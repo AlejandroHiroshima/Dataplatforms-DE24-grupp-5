@@ -71,6 +71,7 @@ def layout():
     with col4:
         st.line_chart(df_ufd[price_col], height=300)
 
+
     with st.expander("Detailed ETH Data"):
         st.dataframe(df_eth.tail(10))
 
