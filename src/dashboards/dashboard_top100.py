@@ -10,7 +10,6 @@ from constants import (
     POSTGRES_USER,
 )
 import time
-import matplotlib.pyplot as plt
 from charts import line_chart
 
 fiat_currency = {"SEK": 10, "NOK": 11, "DKK": 7, "ISK": 140}  # Fixa dessa sen
@@ -18,7 +17,7 @@ fiat_currency = {"SEK": 10, "NOK": 11, "DKK": 7, "ISK": 140}  # Fixa dessa sen
 connection_string = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DBNAME}"
 engine = create_engine(connection_string)
 st.set_page_config(layout="wide")
-
+  
 
 def format_large_number(number):
     if number >= 1_000_000_000:
@@ -30,7 +29,7 @@ def format_large_number(number):
     else:
         return f"{number:.2f}"
 
-#Query metoder
+#Query funktioner
 def get_historical_data(coin_name):
     query = f"""
     SELECT timestamp,
@@ -115,8 +114,8 @@ def layout():
             select_coin = st.selectbox(
                 "Choose cryptocurrency",
                 options=available_coins,
-                index=None,
-            )
+                index=None
+            ) 
 
             if select_coin:
                 with st.spinner(f"Loading data for {select_coin}"):
@@ -127,7 +126,7 @@ def layout():
                     price_chart = line_chart(
                         x=historical_data["timestamp"],
                         y=historical_data["Current price"],
-                        title=f"Price for {select_coin}",
+                        title=f"Price for {select_coin}"
                     )
                     st.pyplot(price_chart)
 
@@ -193,12 +192,12 @@ def layout():
                     with col7:
                         st.metric(
                             "Total Supply",
-                            format_large_number(coin_data["Total Supply"].iloc[0]),
+                            format_large_number(coin_data["Total Supply"].iloc[0])
                         )
                     with col8:
                         st.metric(
                             "Max Supply",
-                            format_large_number(coin_data["Max Supply"].iloc[0]),
+                            format_large_number(coin_data["Max Supply"].iloc[0])
                         )
                     with col9: 
                         st.metric(
