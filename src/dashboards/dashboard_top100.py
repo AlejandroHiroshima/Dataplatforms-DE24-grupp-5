@@ -29,3 +29,33 @@ def format_large_number(number):
         return f"{number / 1_000:.2f}K"
     else:
         return f"{number:.2f}"
+
+#Query metoder
+def get_historical_data(coin_name):
+    query = f"""
+    SELECT timestamp,
+           price as "Current price"
+    FROM top_100 
+    WHERE name = '{coin_name}' 
+    ORDER BY timestamp ASC; 
+    """
+    with engine.connect() as connection: 
+        result = pd.read_sql_query(text(query), connection)
+    return result 
+ 
+def get_coin_names():
+    query = """ 
+    SELECT DISTINCT ON (cmc_rank) name
+    FROM top_100
+    WHERE cmc_rank IS NOT NULL
+    ORDER BY cmc_rank ASC, timestamp DESC 
+    LIMIT 101; 
+    """
+    with engine.connect() as connection:
+        result = pd.read_sql_query(text(query), connection)
+        return result["name"].tolist()
+  
+def load_data(query): 
+    with engine.connect() as connection:
+        result = pd.read_sql_query(text(query), connection)
+        return result.set_index("#")
