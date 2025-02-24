@@ -10,7 +10,7 @@ from constants.constants import (
     POSTGRES_USER,
 )
 import time
-from charts import line_chart
+from dashboards.resources.charts import line_chart
 
 fiat_currency = {"SEK": 10, "NOK": 11, "DKK": 7, "ISK": 140}  # Fixa dessa sen
 
@@ -90,7 +90,7 @@ def layout():
         with col_left1:
             pass
         with col_middle1:
-            st.image("kryptokollen.png", width=2000)
+            st.image("./resources/kryptokollen.png", width=2000)
             with col_right1:
                 pass
         col_left2, col_middle2, col_right2 = st.columns(3)

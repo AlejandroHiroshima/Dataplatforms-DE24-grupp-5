@@ -70,7 +70,7 @@
         {
             "label": "Run Streamlit Dashboard",
             "type": "shell",
-            "command": "streamlit run dashboard_main.py",
+            "command": "streamlit run Home.py",
             "options": {
                 "cwd": "${workspaceFolder}/src/dashboards",
                 "shell": "zsh"
