@@ -23,6 +23,17 @@
             "problemMatcher": [],
             "group": "build"
         },
+                {
+            "label": "Run Producer Three",
+            "type": "shell",
+            "command": "python producers/producer_three.py",
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "shell": "zsh"
+            },
+            "problemMatcher": [],
+            "group": "build"
+        },
         {
             "label": "Run Consumer One",
             "type": "shell",
@@ -45,10 +56,21 @@
             "problemMatcher": [],
             "group": "build"
         },
+                {
+            "label": "Run Consumer Three",
+            "type": "shell",
+            "command": "python consumers/consumer_three.py",
+            "options": {
+                "cwd": "${workspaceFolder}/src",
+                "shell": "zsh"
+            },
+            "problemMatcher": [],
+            "group": "build"
+        },
         {
             "label": "Run Streamlit Dashboard",
             "type": "shell",
-            "command": "streamlit run dashboard.py",
+            "command": "streamlit run dashboard_main.py",
             "options": {
                 "cwd": "${workspaceFolder}/src/dashboards",
                 "shell": "zsh"
