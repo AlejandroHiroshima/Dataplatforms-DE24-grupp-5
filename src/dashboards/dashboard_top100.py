@@ -36,7 +36,9 @@ def format_large_number(number):
         return f"{number:.2f}"
 
 
-# Query funktioner
+# Query funktioner:
+
+# För grafen
 def get_historical_data(coin_name):
     query = f"""
     SELECT timestamp,
@@ -49,7 +51,7 @@ def get_historical_data(coin_name):
         result = pd.read_sql_query(text(query), connection)
     return result
 
-
+# För listan för de unika coins'en:
 def get_coin_names():
     query = """ 
     SELECT DISTINCT ON (cmc_rank) name
@@ -62,14 +64,14 @@ def get_coin_names():
         result = pd.read_sql_query(text(query), connection)
         return result["name"].tolist()
 
-
+# För top100 dataframen
 def load_data(query):
     with engine.connect() as connection:
         result = pd.read_sql_query(text(query), connection)
         return result.set_index("#")
 
 
-count = st_autorefresh(interval=60 * 1000, limit=100, key="data_refresh")
+st_autorefresh(interval=60 * 1000, limit=100, key="data_refresh")
 
 
 def layout():
@@ -180,7 +182,7 @@ def layout():
                         converted_price = current_price * exchange_rate
                         st.metric(
                             "Current Price",
-                            f"${fiat_currency_choice}: {converted_price:.4f}",
+                            f"{fiat_currency_choice}: {converted_price:.4f}",
                         )
                     with col2:
                         volume = coin_data["Volume traded last 24h"].iloc[0]
