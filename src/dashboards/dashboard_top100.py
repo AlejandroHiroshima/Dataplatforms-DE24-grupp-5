@@ -228,7 +228,22 @@ def layout():
                     tags = coin_data["Coin Narrative"].iloc[0]
                     st.subheader("Coin Narrative")
                     for tag in tags:
-                        st.write(tag)
+                        if ("portfolio" in tag or "ecosystem" in tag or "exchange" in tag or "enterprise in tag"):
+                            continue
+                        if tag == "defi":
+                            st.write("DeFi")
+                        elif tag == "nft":
+                            st.write("NFT's")
+                        elif tag == "dao":
+                            st.write("DAO")
+                        elif "gaming" in tag:
+                            st.write("Web3 gaming")
+                        elif tag == "pow":
+                            st.write("Proof-Of-Work")
+                        elif tag == "pos":
+                            st.write("Proof-Of-Stake")
+                        else:
+                            st.write(tag.title())
 
     except Exception as e:
         st.error(f"Ett fel uppstod: {str(e)}")
