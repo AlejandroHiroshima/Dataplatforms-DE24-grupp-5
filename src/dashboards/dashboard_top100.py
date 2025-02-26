@@ -12,6 +12,7 @@ from constants.constants import (
 import time
 from charts import line_chart
 from api.exchange_API import get_exchange_rates
+import json
 
 fiat_currency = {
     "SEK": lambda: get_exchange_rates(base_currency="USD", rate="SEK"),
@@ -94,8 +95,6 @@ def layout():
         """
         )
 
-        df = df.iloc[1:].reset_index(drop=True)
-        df.index = df.index + 1
 
         col_left1, col_middle1, col_right1 = st.columns(3)
         with col_left1:
@@ -104,7 +103,7 @@ def layout():
             st.image("kryptokollen.png", width=2000)
         with col_right1:
             pass
-        
+
         col_left2, col_middle2, col_right2 = st.columns(3)
         with col_left2:
             pass
@@ -232,10 +231,11 @@ def layout():
                             f"{fiat_currency_choice}: {format_large_number(converted_fully_diluted)}")
                             
 
-                    tags = coin_data["Coin Narrative"].iloc[0]
+                    tags_json = coin_data["Coin Narrative"].iloc[0]
+                    tags = json.loads(tags_json) 
                     st.subheader("Coin Narrative")
                     for tag in tags:
-                        if ("portfolio" in tag or "ecosystem" in tag or "exchange" in tag or "enterprise in tag"):
+                        if ("portfolio" in tag or "ecosystem" in tag or "exchange" in tag or "enterprise" in tag):
                             continue
                         if tag == "defi":
                             st.write("DeFi")
