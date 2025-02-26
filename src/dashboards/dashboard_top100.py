@@ -102,8 +102,9 @@ def layout():
             pass
         with col_middle1:
             st.image("kryptokollen.png", width=2000)
-            with col_right1:
-                pass
+        with col_right1:
+            pass
+        
         col_left2, col_middle2, col_right2 = st.columns(3)
         with col_left2:
             pass
