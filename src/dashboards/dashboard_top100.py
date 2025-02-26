@@ -237,11 +237,13 @@ def layout():
                         elif tag == "dao":
                             st.write("DAO")
                         elif "gaming" in tag:
-                            st.write("Web3 gaming")
+                            st.write("Web3 gaming") 
                         elif tag == "pow":
                             st.write("Proof-Of-Work")
-                        elif tag == "pos":
+                        elif tag == "pos": 
                             st.write("Proof-Of-Stake")
+                        elif "ai" in tag:
+                            st.write("AI")
                         else:
                             st.write(tag.title())
 
