@@ -10,9 +10,9 @@ from constants.constants import (
     POSTGRES_USER,
 )
 import time
-from charts import line_chart
 from api.exchange_API import get_exchange_rates
 import json
+from dashboards.resources.charts import line_chart
 
 fiat_currency = {
     "SEK": lambda: get_exchange_rates(base_currency="USD", rate="SEK"),
@@ -95,15 +95,13 @@ def layout():
         """
         )
 
-
         col_left1, col_middle1, col_right1 = st.columns(3)
         with col_left1:
             pass
         with col_middle1:
-            st.image("kryptokollen.png", width=2000)
-        with col_right1:
-            pass
-
+            st.image("./resources/kryptokollen.png", width=2000)
+            with col_right1:
+                pass
         col_left2, col_middle2, col_right2 = st.columns(3)
         with col_left2:
             pass
