@@ -10,9 +10,16 @@ from constants.constants import (
     POSTGRES_USER,
 )
 import time
+from api.exchange_API import get_exchange_rates
+import json
 from dashboards.resources.charts import line_chart
 
-fiat_currency = {"SEK": 10, "NOK": 11, "DKK": 7, "ISK": 140}  # Fixa dessa sen
+fiat_currency = {
+    "SEK": lambda: get_exchange_rates(base_currency="USD", rate="SEK"),
+    "NOK": lambda: get_exchange_rates(base_currency="USD", rate="NOK"),
+    "DKK": lambda: get_exchange_rates(base_currency="USD", rate="DKK"),
+    "ISK": lambda: get_exchange_rates(base_currency="USD", rate="ISK"),
+}
 
 connection_string = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DBNAME}"
 engine = create_engine(connection_string)
@@ -30,7 +37,9 @@ def format_large_number(number):
         return f"{number:.2f}"
 
 
-# Query funktioner
+# Query funktioner:
+
+# För grafen
 def get_historical_data(coin_name):
     query = f"""
     SELECT timestamp,
@@ -43,7 +52,7 @@ def get_historical_data(coin_name):
         result = pd.read_sql_query(text(query), connection)
     return result
 
-
+# För listan för de unika coins'en:
 def get_coin_names():
     query = """ 
     SELECT DISTINCT ON (cmc_rank) name
@@ -56,14 +65,14 @@ def get_coin_names():
         result = pd.read_sql_query(text(query), connection)
         return result["name"].tolist()
 
-
+# För top100 dataframen
 def load_data(query):
     with engine.connect() as connection:
         result = pd.read_sql_query(text(query), connection)
         return result.set_index("#")
 
 
-count = st_autorefresh(interval=60 * 1000, limit=100, key="data_refresh")
+st_autorefresh(interval=60 * 1000, limit=100, key="data_refresh")
 
 
 def layout():
@@ -106,7 +115,6 @@ def layout():
         st.markdown("# Top 100 tokens by market cap:")
         st.dataframe(df, use_container_width=True, height=3535)
 
-        # val av fiat-valuta (gör inget än)
         fiat_currency_choice = st.selectbox(
             "Select fiat currency", fiat_currency.keys(), index=None
         )
@@ -121,11 +129,16 @@ def layout():
                     time.sleep(2)
 
                     historical_data = get_historical_data(select_coin)
+
+                    exchange_rate = fiat_currency[fiat_currency_choice]()
+
+                    historical_data['Converted price'] = historical_data['Current price'] * exchange_rate
+
                     st.subheader(f"Price chart for {select_coin}")
                     price_chart = line_chart(
                         x=historical_data["timestamp"],
-                        y=historical_data["Current price"],
-                        title=f"Price for {select_coin}",
+                        y=historical_data["Converted price"],
+                        title=f"Price for {select_coin} in {fiat_currency_choice}",
                     )
                     st.pyplot(price_chart)
 
@@ -160,23 +173,28 @@ def layout():
 
                     st.subheader(f"Information for: {select_coin}")
 
+                
                     col1, col2, col3 = st.columns(3)
                     with col1:
+                        current_price = coin_data["Current price"].iloc[0]
+                        converted_price = current_price * exchange_rate
                         st.metric(
                             "Current Price",
-                            f"${coin_data['Current price'].iloc[0]:.4f}",
+                            f"{fiat_currency_choice}: {converted_price:.4f}",
                         )
                     with col2:
+                        volume = coin_data["Volume traded last 24h"].iloc[0]
+                        converted_volume = volume * exchange_rate
                         st.metric(
                             "24h Volume",
-                            format_large_number(
-                                coin_data["Volume traded last 24h"].iloc[0]
-                            ),
+                            f"{fiat_currency_choice}: {format_large_number(converted_volume)}"
                         )
                     with col3:
+                        marketcap = coin_data["Market Cap"].iloc[0]
+                        converted_marketcap = marketcap * exchange_rate
                         st.metric(
                             "Market Cap",
-                            format_large_number(coin_data["Market Cap"].iloc[0]),
+                            f"{fiat_currency_choice}: {format_large_number(converted_marketcap)}" 
                         )
 
                     col4, col5, col6 = st.columns(3)
@@ -189,25 +207,50 @@ def layout():
 
                     col7, col8, col9 = st.columns(3)
                     with col7:
+                        total_supply = coin_data["Total Supply"].iloc[0]
+                        converted_total_supply = total_supply * exchange_rate
                         st.metric(
                             "Total Supply",
-                            format_large_number(coin_data["Total Supply"].iloc[0]),
+                            f"{fiat_currency_choice}: {format_large_number(converted_total_supply)}"
                         )
                     with col8:
+                        max_supply = coin_data["Max Supply"].iloc[0]
+                        converted_max_supply = max_supply * exchange_rate
                         st.metric(
                             "Max Supply",
-                            format_large_number(coin_data["Max Supply"].iloc[0]),
-                        )
+                            f"{fiat_currency_choice}: {format_large_number(converted_max_supply)}" 
+                            )
+                        
                     with col9:
+                        fully_diluted = coin_data["Fully Diluted Market Cap"].iloc[0]
+                        converted_fully_diluted = fully_diluted * exchange_rate
                         st.metric(
                             "Fully Diluted Market Cap",
-                            format_large_number(
-                                coin_data["Fully Diluted Market Cap"].iloc[0]
-                            ),
-                        )
+                            f"{fiat_currency_choice}: {format_large_number(converted_fully_diluted)}")
+                            
 
+                    tags_json = coin_data["Coin Narrative"].iloc[0]
+                    tags = json.loads(tags_json) 
                     st.subheader("Coin Narrative")
-                    st.write(coin_data["Coin Narrative"].iloc[0])
+                    for tag in tags:
+                        if ("portfolio" in tag or "ecosystem" in tag or "exchange" in tag or "enterprise" in tag):
+                            continue
+                        if tag == "defi":
+                            st.write("DeFi")
+                        elif tag == "nft":
+                            st.write("NFT's")
+                        elif tag == "dao":
+                            st.write("DAO")
+                        elif "gaming" in tag:
+                            st.write("Web3 gaming") 
+                        elif tag == "pow":
+                            st.write("Proof-Of-Work")
+                        elif tag == "pos": 
+                            st.write("Proof-Of-Stake")
+                        elif "ai" in tag:
+                            st.write("AI")
+                        else:
+                            st.write(tag.title())
 
     except Exception as e:
         st.error(f"Ett fel uppstod: {str(e)}")
