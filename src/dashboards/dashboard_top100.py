@@ -129,11 +129,16 @@ def layout():
                     time.sleep(2)
 
                     historical_data = get_historical_data(select_coin)
+
+                    exchange_rate = fiat_currency[fiat_currency_choice]()
+
+                    historical_data['Converted price'] = historical_data['Current price'] * exchange_rate
+
                     st.subheader(f"Price chart for {select_coin}")
                     price_chart = line_chart(
                         x=historical_data["timestamp"],
-                        y=historical_data["Current price"],
-                        title=f"Price for {select_coin}",
+                        y=historical_data["Converted price"],
+                        title=f"Price for {select_coin} in {fiat_currency_choice}",
                     )
                     st.pyplot(price_chart)
 
@@ -168,8 +173,7 @@ def layout():
 
                     st.subheader(f"Information for: {select_coin}")
 
-                    exchange_rate = fiat_currency[fiat_currency_choice]()
-
+                
                     col1, col2, col3 = st.columns(3)
                     with col1:
                         current_price = coin_data["Current price"].iloc[0]
