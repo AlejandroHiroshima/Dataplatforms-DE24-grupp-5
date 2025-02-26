@@ -210,20 +210,25 @@ def layout():
                             f"{fiat_currency_choice}: {format_large_number(converted_total_supply)}"
                         )
                     with col8:
+                        max_supply = coin_data["Max Supply"].iloc[0]
+                        converted_max_supply = max_supply * exchange_rate
                         st.metric(
                             "Max Supply",
-                            format_large_number(coin_data["Max Supply"].iloc[0]),
-                        )
+                            f"{fiat_currency_choice}: {format_large_number(converted_max_supply)}" 
+                            )
+                        
                     with col9:
+                        fully_diluted = coin_data["Fully Diluted Market Cap"].iloc[0]
+                        converted_fully_diluted = fully_diluted * exchange_rate
                         st.metric(
                             "Fully Diluted Market Cap",
-                            format_large_number(
-                                coin_data["Fully Diluted Market Cap"].iloc[0]
-                            ),
-                        )
+                            f"{fiat_currency_choice}: {format_large_number(converted_fully_diluted)}")
+                            
 
+                    tags = coin_data["Coin Narrative"].iloc[0]
                     st.subheader("Coin Narrative")
-                    st.write(coin_data["Coin Narrative"].iloc[0])
+                    for tag in tags:
+                        st.write(tag)
 
     except Exception as e:
         st.error(f"Ett fel uppstod: {str(e)}")
